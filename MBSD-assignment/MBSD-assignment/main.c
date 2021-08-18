@@ -1,7 +1,7 @@
 #include <avr/io.h>
 #define F_CPU 1000000UL
 #include<util/delay.h>
-
+int MatchPassword(char a[],char b[],int size);
 int GetKeyPressed(void);
 int main(void)
 {
@@ -13,6 +13,7 @@ int main(void)
 	int key;
 	char password[4]={'1','2','3','4'};
 	int index=0;
+	int invaidCount=3;
 	char open=0b11000000;
 	char close=0b11000110;
 	PORTA=0b11000110;
@@ -24,20 +25,22 @@ int main(void)
 		{
 			if (digit[key]==password[index]){
 				index++;
+				if (index==4)
+				{
+					PORTA=open;
+					index=0;
+				}
 			}
-			else if(digit[key]=='0'){
+			else if(digit[key]=='*'){
 				index=0;
-				PORTA=close;
-			}
-		}
-		if (index==4){
-			PORTA=open;
-		}
-		else{
+			}		
+		else if (index!=4){
+			invaidCount--;
 			PORTA=close;
 		}
 	}
 }
+	}
 int GetKeyPressed(void)
 {
 	char x;

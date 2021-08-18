@@ -3,29 +3,29 @@ MBSD-assignment.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  000001c4  2**0
+  0 .data         00000000  00800100  00800100  000001ca  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000170  00000000  00000000  00000054  2**1
+  1 .text         00000176  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000001c4  2**0
+  2 .comment      00000030  00000000  00000000  000001ca  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001f4  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001fc  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000028  00000000  00000000  00000230  2**0
+  4 .debug_aranges 00000028  00000000  00000000  00000238  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000719  00000000  00000000  00000258  2**0
+  5 .debug_info   00000728  00000000  00000000  00000260  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000661  00000000  00000000  00000971  2**0
+  6 .debug_abbrev 00000661  00000000  00000000  00000988  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   0000027f  00000000  00000000  00000fd2  2**0
+  7 .debug_line   00000285  00000000  00000000  00000fe9  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000044  00000000  00000000  00001254  2**2
+  8 .debug_frame  00000044  00000000  00000000  00001270  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000037c  00000000  00000000  00001298  2**0
+  9 .debug_str    00000388  00000000  00000000  000012b4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000000bd  00000000  00000000  00001614  2**0
+ 10 .debug_loc    000000d1  00000000  00000000  0000163c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000018  00000000  00000000  000016d1  2**0
+ 11 .debug_ranges 00000018  00000000  00000000  0000170d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -68,14 +68,14 @@ Disassembly of section .text:
   78:	de bf       	out	0x3e, r29	; 62
   7a:	cd bf       	out	0x3d, r28	; 61
   7c:	0e 94 4f 00 	call	0x9e	; 0x9e <main>
-  80:	0c 94 b6 00 	jmp	0x16c	; 0x16c <_exit>
+  80:	0c 94 b9 00 	jmp	0x172	; 0x172 <_exit>
 
 00000084 <__bad_interrupt>:
   84:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000088 <GetKeyPressed>:
-	}
 }
+	}
 int GetKeyPressed(void)
 {
 	char x;
@@ -104,7 +104,7 @@ int GetKeyPressed(void)
 0000009e <main>:
 #define F_CPU 1000000UL
 #include<util/delay.h>
-
+int MatchPassword(char a[],char b[],int size);
 int GetKeyPressed(void);
 int main(void)
 {
@@ -176,6 +176,7 @@ int main(void)
  112:	9f 8b       	std	Y+23, r25	; 0x17
  114:	88 8f       	std	Y+24, r24	; 0x18
 	int index=0;
+	int invaidCount=3;
 	char open=0b11000000;
 	char close=0b11000110;
 	PORTA=0b11000110;
@@ -189,75 +190,78 @@ int main(void)
 	int index=0;
  11a:	00 e0       	ldi	r16, 0x00	; 0
  11c:	10 e0       	ldi	r17, 0x00	; 0
+ 11e:	02 c0       	rjmp	.+4      	; 0x124 <main+0x86>
+					PORTA=open;
+					index=0;
+				}
+			}
+			else if(digit[key]=='*'){
+				index=0;
+ 120:	00 e0       	ldi	r16, 0x00	; 0
+ 122:	10 e0       	ldi	r17, 0x00	; 0
 	char close=0b11000110;
 	PORTA=0b11000110;
 	while(1)
 	{
 		//TODO:: Please write your application code
 		key= GetKeyPressed();
- 11e:	0e 94 44 00 	call	0x88	; 0x88 <GetKeyPressed>
+ 124:	0e 94 44 00 	call	0x88	; 0x88 <GetKeyPressed>
 		if(key !=16)
- 122:	80 31       	cpi	r24, 0x10	; 16
- 124:	91 05       	cpc	r25, r1
- 126:	c9 f0       	breq	.+50     	; 0x15a <main+0xbc>
+ 128:	80 31       	cpi	r24, 0x10	; 16
+ 12a:	91 05       	cpc	r25, r1
+ 12c:	d9 f3       	breq	.-10     	; 0x124 <main+0x86>
 		{
 			if (digit[key]==password[index]){
- 128:	e1 e0       	ldi	r30, 0x01	; 1
- 12a:	f0 e0       	ldi	r31, 0x00	; 0
- 12c:	ec 0f       	add	r30, r28
- 12e:	fd 1f       	adc	r31, r29
- 130:	e8 0f       	add	r30, r24
- 132:	f9 1f       	adc	r31, r25
- 134:	80 81       	ld	r24, Z
- 136:	e5 e1       	ldi	r30, 0x15	; 21
- 138:	f0 e0       	ldi	r31, 0x00	; 0
- 13a:	ec 0f       	add	r30, r28
- 13c:	fd 1f       	adc	r31, r29
- 13e:	e0 0f       	add	r30, r16
- 140:	f1 1f       	adc	r31, r17
- 142:	90 81       	ld	r25, Z
- 144:	89 13       	cpse	r24, r25
- 146:	03 c0       	rjmp	.+6      	; 0x14e <main+0xb0>
+ 12e:	e1 e0       	ldi	r30, 0x01	; 1
+ 130:	f0 e0       	ldi	r31, 0x00	; 0
+ 132:	ec 0f       	add	r30, r28
+ 134:	fd 1f       	adc	r31, r29
+ 136:	e8 0f       	add	r30, r24
+ 138:	f9 1f       	adc	r31, r25
+ 13a:	80 81       	ld	r24, Z
+ 13c:	e5 e1       	ldi	r30, 0x15	; 21
+ 13e:	f0 e0       	ldi	r31, 0x00	; 0
+ 140:	ec 0f       	add	r30, r28
+ 142:	fd 1f       	adc	r31, r29
+ 144:	e0 0f       	add	r30, r16
+ 146:	f1 1f       	adc	r31, r17
+ 148:	90 81       	ld	r25, Z
+ 14a:	89 13       	cpse	r24, r25
+ 14c:	0a c0       	rjmp	.+20     	; 0x162 <main+0xc4>
 				index++;
- 148:	0f 5f       	subi	r16, 0xFF	; 255
- 14a:	1f 4f       	sbci	r17, 0xFF	; 255
- 14c:	06 c0       	rjmp	.+12     	; 0x15a <main+0xbc>
+ 14e:	0f 5f       	subi	r16, 0xFF	; 255
+ 150:	1f 4f       	sbci	r17, 0xFF	; 255
+				if (index==4)
+ 152:	04 30       	cpi	r16, 0x04	; 4
+ 154:	11 05       	cpc	r17, r1
+ 156:	31 f7       	brne	.-52     	; 0x124 <main+0x86>
+				{
+					PORTA=open;
+ 158:	80 ec       	ldi	r24, 0xC0	; 192
+ 15a:	8b bb       	out	0x1b, r24	; 27
+					index=0;
+ 15c:	00 e0       	ldi	r16, 0x00	; 0
+ 15e:	10 e0       	ldi	r17, 0x00	; 0
+ 160:	e1 cf       	rjmp	.-62     	; 0x124 <main+0x86>
+				}
 			}
-			else if(digit[key]=='0'){
- 14e:	80 33       	cpi	r24, 0x30	; 48
- 150:	21 f4       	brne	.+8      	; 0x15a <main+0xbc>
+			else if(digit[key]=='*'){
+ 162:	8a 32       	cpi	r24, 0x2A	; 42
+ 164:	e9 f2       	breq	.-70     	; 0x120 <main+0x82>
 				index=0;
-				PORTA=close;
- 152:	86 ec       	ldi	r24, 0xC6	; 198
- 154:	8b bb       	out	0x1b, r24	; 27
-		{
-			if (digit[key]==password[index]){
-				index++;
-			}
-			else if(digit[key]=='0'){
-				index=0;
- 156:	00 e0       	ldi	r16, 0x00	; 0
- 158:	10 e0       	ldi	r17, 0x00	; 0
-				PORTA=close;
-			}
-		}
-		if (index==4){
- 15a:	04 30       	cpi	r16, 0x04	; 4
- 15c:	11 05       	cpc	r17, r1
- 15e:	19 f4       	brne	.+6      	; 0x166 <main+0xc8>
-			PORTA=open;
- 160:	80 ec       	ldi	r24, 0xC0	; 192
- 162:	8b bb       	out	0x1b, r24	; 27
- 164:	dc cf       	rjmp	.-72     	; 0x11e <main+0x80>
-		}
-		else{
+			}		
+		else if (index!=4){
+ 166:	04 30       	cpi	r16, 0x04	; 4
+ 168:	11 05       	cpc	r17, r1
+ 16a:	e1 f2       	breq	.-72     	; 0x124 <main+0x86>
+			invaidCount--;
 			PORTA=close;
- 166:	86 ec       	ldi	r24, 0xC6	; 198
- 168:	8b bb       	out	0x1b, r24	; 27
- 16a:	d9 cf       	rjmp	.-78     	; 0x11e <main+0x80>
+ 16c:	86 ec       	ldi	r24, 0xC6	; 198
+ 16e:	8b bb       	out	0x1b, r24	; 27
+ 170:	d9 cf       	rjmp	.-78     	; 0x124 <main+0x86>
 
-0000016c <_exit>:
- 16c:	f8 94       	cli
+00000172 <_exit>:
+ 172:	f8 94       	cli
 
-0000016e <__stop_program>:
- 16e:	ff cf       	rjmp	.-2      	; 0x16e <__stop_program>
+00000174 <__stop_program>:
+ 174:	ff cf       	rjmp	.-2      	; 0x174 <__stop_program>
