@@ -3,6 +3,7 @@
 #include<util/delay.h>
 
 int GetKeyPressed(void);
+int checkPassword(char a[],char b[],int size);
 int main(void)
 {
 	char digit[20]={'7','8','9','A','4','5','6','B','1','2','3','C','*','0','#','D','\0'};
@@ -12,6 +13,7 @@ int main(void)
 	DDRB=(1<<PINB1);
 	int key;
 	char password[4]={'1','2','3','4'};
+	char check[4];
 	int index=0;
 	char open=0b11000000;
 	char close=0b11000110;
@@ -20,19 +22,28 @@ int main(void)
 	{
 		//TODO:: Please write your application code
 		key= GetKeyPressed();
+		// any key is pressed
 		if(key !=16)
-		{
-			if (digit[key]==password[index]){
+		{ //password key is correct and it matches
+			if (digit[key]==password[index] && index!=4){
+				check[index]=password[index];
 				index++;
 			}
+			//reset button
 			else if(digit[key]=='0'){
 				index=0;
 			}
-			else if (digit[key]!=password[index-1]){
+			else if(digit[key]=='#'){
+				index--;
+				PORTA=0b00000000;
+			}
+			//incorrect input is entered
+			else if (digit[key]!=password[index-1] && index!=4){
 				index=0;
+				memset(check,0,4);
 			}
 		}
-		if (index==4){
+		if (index==4 && checkPassword(password,check,4)){
 			PORTA=open;
 		}
 		else{
@@ -52,4 +63,14 @@ int GetKeyPressed(void)
 		return data;
 	}
 	return 16;
+}
+
+//function to compare array elements
+int checkPassword(int a[],int b[],int size)	{
+	int i;
+	for(i=0;i<size;i++){
+		if(a[i]!=b[i])
+		return 1;
+	}
+	return 0;
 }
