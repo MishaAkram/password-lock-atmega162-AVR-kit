@@ -10,24 +10,23 @@ int checkPassword(char a[],char b[],int size);
 int main(void)
 {
 	char digit[20]={'7','8','9','A','4','5','6','B','1','2','3','C','*','0','#','D','\0'};
-	DDRD=0xF0;
+	DDRD=0x00;
 	DDRA=0xFF;
 	DDRC=0xF0;
 	DDRB=(1<<PINB1);
 	int key;
-	char password[4]={'1','2','3','4'};
-	char check[4];
-	int invalid=0;
-	int index=0;
-	char open=0b11000000;
-	char close=0b11000110;
-	PORTA=0b11000110;
-	char invalid_open=0b10000001;
-	char invalid_close=0b00000000;
+	char password[4]={'1','2','3','4'}; // saved password
+	char check[4]; // check password
+	int invalid=0; // invalid count
+	int index=0; // password index
+	char open=0b11000000; // 7-segment display 'O'
+	char close=0b11000110;// 7-segment display 'C'
+	PORTA=close;
+	char invalid_open=0b10000001; // led blink on
+	char invalid_close=0b00000000; // led blink off
 	
 	while(1)
 	{
-		//TODO:: Please write your application code
 		key= GetKeyPressed();
 		// any key is pressed
 		if(key !=16)
@@ -36,18 +35,21 @@ int main(void)
 				check[index]=password[index];
 				index++;
 			}
-			//reset button
-			else if(digit[key]=='0'){
+			//reset password
+			else if(digit[key]=='*'){
 				index=0;
-			}
-			else if(digit[key]=='#'){
-				index--;
-				PORTA=0b00000000;
 			}
 			//incorrect input is entered
 			else if (digit[key]!=password[index-1] && index!=4){
 				index=0;
 				memset(check,0,4);
+				_delay_ms(500);
+				if (invalid%4==0)
+				{
+					PORTC=invalid_open;
+					_delay_ms(1000);
+					PORTC=invalid_close;
+				}
 				invalid++;
 			}
 		}
@@ -55,8 +57,10 @@ int main(void)
 			PORTA=open;
 			invalid=0;
 		}
-		
-		if (invalid==4){
+		if((PIND & 0x10)==0x10){
+			index=0;
+		}
+		if (invalid==12){
 			PORTC=invalid_open;
 			_delay_ms(5000);
 			PORTC=invalid_close;
@@ -81,7 +85,7 @@ int GetKeyPressed(void)
 	return 16;
 }
 
-//function to compare array elements
+//function to compare password keys
 int checkPassword(char a[],char b[],int size)	{
 	int i;
 	for(i=0;i<size;i++){
@@ -90,3 +94,4 @@ int checkPassword(char a[],char b[],int size)	{
 	}
 	return 0;
 }
+
