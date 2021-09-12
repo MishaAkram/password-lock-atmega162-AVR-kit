@@ -3,29 +3,29 @@ MBSD-assignment.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  000002c6  2**0
+  0 .data         00000000  00800100  00800100  0000026e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000272  00000000  00000000  00000054  2**1
+  1 .text         0000021a  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000002c6  2**0
+  2 .comment      00000030  00000000  00000000  0000026e  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002f8  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002a0  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000030  00000000  00000000  00000334  2**0
+  4 .debug_aranges 00000030  00000000  00000000  000002dc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000008d0  00000000  00000000  00000364  2**0
+  5 .debug_info   000007b2  00000000  00000000  0000030c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000734  00000000  00000000  00000c34  2**0
+  6 .debug_abbrev 000006ca  00000000  00000000  00000abe  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000003cf  00000000  00000000  00001368  2**0
+  7 .debug_line   00000308  00000000  00000000  00001188  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000060  00000000  00000000  00001738  2**2
+  8 .debug_frame  00000060  00000000  00000000  00001490  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000003f8  00000000  00000000  00001798  2**0
+  9 .debug_str    00000395  00000000  00000000  000014f0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000029a  00000000  00000000  00001b90  2**0
+ 10 .debug_loc    000001a6  00000000  00000000  00001885  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000020  00000000  00000000  00001e2a  2**0
+ 11 .debug_ranges 00000020  00000000  00000000  00001a2b  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -68,7 +68,7 @@ Disassembly of section .text:
   78:	de bf       	out	0x3e, r29	; 62
   7a:	cd bf       	out	0x3d, r28	; 61
   7c:	0e 94 6d 00 	call	0xda	; 0xda <main>
-  80:	0c 94 37 01 	jmp	0x26e	; 0x26e <_exit>
+  80:	0c 94 0b 01 	jmp	0x216	; 0x216 <_exit>
 
 00000084 <__bad_interrupt>:
   84:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -220,246 +220,181 @@ int main(void)
 	DDRA=0xFF;
  13e:	4f ef       	ldi	r20, 0xFF	; 255
  140:	4a bb       	out	0x1a, r20	; 26
-	DDRC=0xF0;
- 142:	40 ef       	ldi	r20, 0xF0	; 240
- 144:	44 bb       	out	0x14, r20	; 20
+	DDRC=0x00;
+ 142:	14 ba       	out	0x14, r1	; 20
 	DDRB=(1<<PINB1);
- 146:	42 e0       	ldi	r20, 0x02	; 2
- 148:	47 bb       	out	0x17, r20	; 23
+ 144:	42 e0       	ldi	r20, 0x02	; 2
+ 146:	47 bb       	out	0x17, r20	; 23
 	int key;
 	char password[4]={'1','2','3','4'}; // saved password
- 14a:	3d 8b       	std	Y+21, r19	; 0x15
- 14c:	2e 8b       	std	Y+22, r18	; 0x16
- 14e:	9f 8b       	std	Y+23, r25	; 0x17
- 150:	88 8f       	std	Y+24, r24	; 0x18
+ 148:	3d 8b       	std	Y+21, r19	; 0x15
+ 14a:	2e 8b       	std	Y+22, r18	; 0x16
+ 14c:	9f 8b       	std	Y+23, r25	; 0x17
+ 14e:	88 8f       	std	Y+24, r24	; 0x18
 	char check[4]; // check password
-	int invalid=0; // invalid count
 	int index=0; // password index
 	char open=0b11000000; // 7-segment display 'O'
 	char close=0b11000110;// 7-segment display 'C'
 	PORTA=close;
- 152:	86 ec       	ldi	r24, 0xC6	; 198
- 154:	8b bb       	out	0x1b, r24	; 27
+ 150:	86 ec       	ldi	r24, 0xC6	; 198
+ 152:	8b bb       	out	0x1b, r24	; 27
+	DDRC=0x00;
 	DDRB=(1<<PINB1);
 	int key;
 	char password[4]={'1','2','3','4'}; // saved password
 	char check[4]; // check password
-	int invalid=0; // invalid count
 	int index=0; // password index
- 156:	00 e0       	ldi	r16, 0x00	; 0
- 158:	10 e0       	ldi	r17, 0x00	; 0
-	DDRC=0xF0;
-	DDRB=(1<<PINB1);
-	int key;
-	char password[4]={'1','2','3','4'}; // saved password
-	char check[4]; // check password
-	int invalid=0; // invalid count
- 15a:	e1 2c       	mov	r14, r1
- 15c:	f1 2c       	mov	r15, r1
-	char invalid_open=0b10000001; // led blink on
-	char invalid_close=0b00000000; // led blink off
+ 154:	00 e0       	ldi	r16, 0x00	; 0
+ 156:	10 e0       	ldi	r17, 0x00	; 0
+	char close=0b11000110;// 7-segment display 'C'
+	PORTA=close;
 	
 	while(1)
 	{
 		key= GetKeyPressed();
- 15e:	0e 94 44 00 	call	0x88	; 0x88 <GetKeyPressed>
+ 158:	0e 94 44 00 	call	0x88	; 0x88 <GetKeyPressed>
 		// any key is pressed
 		if(key !=16)
- 162:	80 31       	cpi	r24, 0x10	; 16
- 164:	91 05       	cpc	r25, r1
- 166:	09 f4       	brne	.+2      	; 0x16a <main+0x90>
- 168:	56 c0       	rjmp	.+172    	; 0x216 <__EEPROM_REGION_LENGTH__+0x16>
+ 15c:	80 31       	cpi	r24, 0x10	; 16
+ 15e:	91 05       	cpc	r25, r1
+ 160:	c9 f1       	breq	.+114    	; 0x1d4 <main+0xfa>
 		{ //password key is correct and it matches
 			if (digit[key]==password[index] && index!=4){
- 16a:	e1 e0       	ldi	r30, 0x01	; 1
- 16c:	f0 e0       	ldi	r31, 0x00	; 0
- 16e:	ec 0f       	add	r30, r28
- 170:	fd 1f       	adc	r31, r29
- 172:	e8 0f       	add	r30, r24
- 174:	f9 1f       	adc	r31, r25
- 176:	80 81       	ld	r24, Z
- 178:	e5 e1       	ldi	r30, 0x15	; 21
- 17a:	f0 e0       	ldi	r31, 0x00	; 0
- 17c:	ec 0f       	add	r30, r28
- 17e:	fd 1f       	adc	r31, r29
- 180:	e0 0f       	add	r30, r16
- 182:	f1 1f       	adc	r31, r17
- 184:	90 81       	ld	r25, Z
- 186:	89 13       	cpse	r24, r25
- 188:	0d c0       	rjmp	.+26     	; 0x1a4 <main+0xca>
- 18a:	04 30       	cpi	r16, 0x04	; 4
- 18c:	11 05       	cpc	r17, r1
- 18e:	51 f0       	breq	.+20     	; 0x1a4 <main+0xca>
+ 162:	e1 e0       	ldi	r30, 0x01	; 1
+ 164:	f0 e0       	ldi	r31, 0x00	; 0
+ 166:	ec 0f       	add	r30, r28
+ 168:	fd 1f       	adc	r31, r29
+ 16a:	e8 0f       	add	r30, r24
+ 16c:	f9 1f       	adc	r31, r25
+ 16e:	80 81       	ld	r24, Z
+ 170:	e5 e1       	ldi	r30, 0x15	; 21
+ 172:	f0 e0       	ldi	r31, 0x00	; 0
+ 174:	ec 0f       	add	r30, r28
+ 176:	fd 1f       	adc	r31, r29
+ 178:	e0 0f       	add	r30, r16
+ 17a:	f1 1f       	adc	r31, r17
+ 17c:	90 81       	ld	r25, Z
+ 17e:	89 13       	cpse	r24, r25
+ 180:	0f c0       	rjmp	.+30     	; 0x1a0 <main+0xc6>
+ 182:	04 30       	cpi	r16, 0x04	; 4
+ 184:	11 05       	cpc	r17, r1
+ 186:	61 f0       	breq	.+24     	; 0x1a0 <main+0xc6>
 				check[index]=password[index];
- 190:	e9 e1       	ldi	r30, 0x19	; 25
- 192:	f0 e0       	ldi	r31, 0x00	; 0
- 194:	ec 0f       	add	r30, r28
- 196:	fd 1f       	adc	r31, r29
- 198:	e0 0f       	add	r30, r16
- 19a:	f1 1f       	adc	r31, r17
- 19c:	90 83       	st	Z, r25
+ 188:	e9 e1       	ldi	r30, 0x19	; 25
+ 18a:	f0 e0       	ldi	r31, 0x00	; 0
+ 18c:	ec 0f       	add	r30, r28
+ 18e:	fd 1f       	adc	r31, r29
+ 190:	e0 0f       	add	r30, r16
+ 192:	f1 1f       	adc	r31, r17
+ 194:	90 83       	st	Z, r25
 				index++;
- 19e:	0f 5f       	subi	r16, 0xFF	; 255
- 1a0:	1f 4f       	sbci	r17, 0xFF	; 255
- 1a2:	39 c0       	rjmp	.+114    	; 0x216 <__EEPROM_REGION_LENGTH__+0x16>
+ 196:	78 01       	movw	r14, r16
+ 198:	bf ef       	ldi	r27, 0xFF	; 255
+ 19a:	eb 1a       	sub	r14, r27
+ 19c:	fb 0a       	sbc	r15, r27
+ 19e:	22 c0       	rjmp	.+68     	; 0x1e4 <main+0x10a>
 			}
 			//reset password
 			else if(digit[key]=='*'){
- 1a4:	8a 32       	cpi	r24, 0x2A	; 42
- 1a6:	a9 f1       	breq	.+106    	; 0x212 <__EEPROM_REGION_LENGTH__+0x12>
+ 1a0:	8a 32       	cpi	r24, 0x2A	; 42
+ 1a2:	d1 f0       	breq	.+52     	; 0x1d8 <main+0xfe>
 				index=0;
 			}
 			//incorrect input is entered
 			else if (digit[key]!=password[index-1] && index!=4){
- 1a8:	f8 01       	movw	r30, r16
- 1aa:	31 97       	sbiw	r30, 0x01	; 1
- 1ac:	25 e1       	ldi	r18, 0x15	; 21
- 1ae:	30 e0       	ldi	r19, 0x00	; 0
- 1b0:	2c 0f       	add	r18, r28
- 1b2:	3d 1f       	adc	r19, r29
- 1b4:	e2 0f       	add	r30, r18
- 1b6:	f3 1f       	adc	r31, r19
- 1b8:	90 81       	ld	r25, Z
- 1ba:	89 17       	cp	r24, r25
- 1bc:	61 f1       	breq	.+88     	; 0x216 <__EEPROM_REGION_LENGTH__+0x16>
- 1be:	04 30       	cpi	r16, 0x04	; 4
- 1c0:	11 05       	cpc	r17, r1
- 1c2:	49 f1       	breq	.+82     	; 0x216 <__EEPROM_REGION_LENGTH__+0x16>
+ 1a4:	f8 01       	movw	r30, r16
+ 1a6:	31 97       	sbiw	r30, 0x01	; 1
+ 1a8:	25 e1       	ldi	r18, 0x15	; 21
+ 1aa:	30 e0       	ldi	r19, 0x00	; 0
+ 1ac:	2c 0f       	add	r18, r28
+ 1ae:	3d 1f       	adc	r19, r29
+ 1b0:	e2 0f       	add	r30, r18
+ 1b2:	f3 1f       	adc	r31, r19
+ 1b4:	90 81       	ld	r25, Z
+ 1b6:	89 17       	cp	r24, r25
+ 1b8:	91 f0       	breq	.+36     	; 0x1de <main+0x104>
+ 1ba:	04 30       	cpi	r16, 0x04	; 4
+ 1bc:	11 05       	cpc	r17, r1
+ 1be:	89 f0       	breq	.+34     	; 0x1e2 <main+0x108>
 				index=0;
 				memset(check,0,4);
- 1c4:	fe 01       	movw	r30, r28
- 1c6:	79 96       	adiw	r30, 0x19	; 25
- 1c8:	84 e0       	ldi	r24, 0x04	; 4
- 1ca:	df 01       	movw	r26, r30
- 1cc:	1d 92       	st	X+, r1
- 1ce:	8a 95       	dec	r24
- 1d0:	e9 f7       	brne	.-6      	; 0x1cc <main+0xf2>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 1d2:	bf e9       	ldi	r27, 0x9F	; 159
- 1d4:	26 e8       	ldi	r18, 0x86	; 134
- 1d6:	31 e0       	ldi	r19, 0x01	; 1
- 1d8:	b1 50       	subi	r27, 0x01	; 1
- 1da:	20 40       	sbci	r18, 0x00	; 0
- 1dc:	30 40       	sbci	r19, 0x00	; 0
- 1de:	e1 f7       	brne	.-8      	; 0x1d8 <main+0xfe>
- 1e0:	00 c0       	rjmp	.+0      	; 0x1e2 <main+0x108>
- 1e2:	00 00       	nop
-				_delay_ms(500);
-				if (invalid%4==0)
- 1e4:	c7 01       	movw	r24, r14
- 1e6:	83 70       	andi	r24, 0x03	; 3
- 1e8:	99 27       	eor	r25, r25
- 1ea:	89 2b       	or	r24, r25
- 1ec:	61 f4       	brne	.+24     	; 0x206 <__EEPROM_REGION_LENGTH__+0x6>
-				{
-					PORTC=invalid_open;
- 1ee:	81 e8       	ldi	r24, 0x81	; 129
- 1f0:	85 bb       	out	0x15, r24	; 21
- 1f2:	8f e3       	ldi	r24, 0x3F	; 63
- 1f4:	9d e0       	ldi	r25, 0x0D	; 13
- 1f6:	a3 e0       	ldi	r26, 0x03	; 3
- 1f8:	81 50       	subi	r24, 0x01	; 1
- 1fa:	90 40       	sbci	r25, 0x00	; 0
- 1fc:	a0 40       	sbci	r26, 0x00	; 0
- 1fe:	e1 f7       	brne	.-8      	; 0x1f8 <main+0x11e>
- 200:	00 c0       	rjmp	.+0      	; 0x202 <__EEPROM_REGION_LENGTH__+0x2>
- 202:	00 00       	nop
-					_delay_ms(1000);
-					PORTC=invalid_close;
- 204:	15 ba       	out	0x15, r1	; 21
-				}
-				invalid++;
- 206:	bf ef       	ldi	r27, 0xFF	; 255
- 208:	eb 1a       	sub	r14, r27
- 20a:	fb 0a       	sbc	r15, r27
+ 1c0:	fe 01       	movw	r30, r28
+ 1c2:	79 96       	adiw	r30, 0x19	; 25
+ 1c4:	84 e0       	ldi	r24, 0x04	; 4
+ 1c6:	df 01       	movw	r26, r30
+ 1c8:	1d 92       	st	X+, r1
+ 1ca:	8a 95       	dec	r24
+ 1cc:	e9 f7       	brne	.-6      	; 0x1c8 <main+0xee>
 			else if(digit[key]=='*'){
 				index=0;
 			}
 			//incorrect input is entered
 			else if (digit[key]!=password[index-1] && index!=4){
 				index=0;
- 20c:	00 e0       	ldi	r16, 0x00	; 0
- 20e:	10 e0       	ldi	r17, 0x00	; 0
- 210:	02 c0       	rjmp	.+4      	; 0x216 <__EEPROM_REGION_LENGTH__+0x16>
+ 1ce:	e1 2c       	mov	r14, r1
+ 1d0:	f1 2c       	mov	r15, r1
+ 1d2:	08 c0       	rjmp	.+16     	; 0x1e4 <main+0x10a>
+ 1d4:	78 01       	movw	r14, r16
+ 1d6:	06 c0       	rjmp	.+12     	; 0x1e4 <main+0x10a>
 				check[index]=password[index];
 				index++;
 			}
 			//reset password
 			else if(digit[key]=='*'){
 				index=0;
- 212:	00 e0       	ldi	r16, 0x00	; 0
- 214:	10 e0       	ldi	r17, 0x00	; 0
-					PORTC=invalid_close;
-				}
-				invalid++;
+ 1d8:	e1 2c       	mov	r14, r1
+ 1da:	f1 2c       	mov	r15, r1
+ 1dc:	03 c0       	rjmp	.+6      	; 0x1e4 <main+0x10a>
+ 1de:	78 01       	movw	r14, r16
+ 1e0:	01 c0       	rjmp	.+2      	; 0x1e4 <main+0x10a>
+ 1e2:	78 01       	movw	r14, r16
+			else if (digit[key]!=password[index-1] && index!=4){
+				index=0;
+				memset(check,0,4);
 			}
 		}
 		if (index==4 && checkPassword(password,check,4)==0){
- 216:	04 30       	cpi	r16, 0x04	; 4
- 218:	11 05       	cpc	r17, r1
- 21a:	79 f4       	brne	.+30     	; 0x23a <__EEPROM_REGION_LENGTH__+0x3a>
- 21c:	44 e0       	ldi	r20, 0x04	; 4
- 21e:	50 e0       	ldi	r21, 0x00	; 0
- 220:	be 01       	movw	r22, r28
- 222:	67 5e       	subi	r22, 0xE7	; 231
- 224:	7f 4f       	sbci	r23, 0xFF	; 255
- 226:	ce 01       	movw	r24, r28
- 228:	45 96       	adiw	r24, 0x15	; 21
- 22a:	0e 94 4f 00 	call	0x9e	; 0x9e <checkPassword>
- 22e:	89 2b       	or	r24, r25
- 230:	21 f4       	brne	.+8      	; 0x23a <__EEPROM_REGION_LENGTH__+0x3a>
+ 1e4:	b4 e0       	ldi	r27, 0x04	; 4
+ 1e6:	eb 16       	cp	r14, r27
+ 1e8:	f1 04       	cpc	r15, r1
+ 1ea:	69 f4       	brne	.+26     	; 0x206 <__EEPROM_REGION_LENGTH__+0x6>
+ 1ec:	44 e0       	ldi	r20, 0x04	; 4
+ 1ee:	50 e0       	ldi	r21, 0x00	; 0
+ 1f0:	be 01       	movw	r22, r28
+ 1f2:	67 5e       	subi	r22, 0xE7	; 231
+ 1f4:	7f 4f       	sbci	r23, 0xFF	; 255
+ 1f6:	ce 01       	movw	r24, r28
+ 1f8:	45 96       	adiw	r24, 0x15	; 21
+ 1fa:	0e 94 4f 00 	call	0x9e	; 0x9e <checkPassword>
+ 1fe:	89 2b       	or	r24, r25
+ 200:	11 f4       	brne	.+4      	; 0x206 <__EEPROM_REGION_LENGTH__+0x6>
 			PORTA=open;
- 232:	80 ec       	ldi	r24, 0xC0	; 192
- 234:	8b bb       	out	0x1b, r24	; 27
-			invalid=0;
- 236:	e1 2c       	mov	r14, r1
- 238:	f1 2c       	mov	r15, r1
+ 202:	80 ec       	ldi	r24, 0xC0	; 192
+ 204:	8b bb       	out	0x1b, r24	; 27
 		}
 		if((PIND & 0x10)==0x10){
- 23a:	84 9b       	sbis	0x10, 4	; 16
- 23c:	02 c0       	rjmp	.+4      	; 0x242 <__EEPROM_REGION_LENGTH__+0x42>
 			index=0;
- 23e:	00 e0       	ldi	r16, 0x00	; 0
- 240:	10 e0       	ldi	r17, 0x00	; 0
+ 206:	00 e0       	ldi	r16, 0x00	; 0
+ 208:	10 e0       	ldi	r17, 0x00	; 0
+			}
 		}
-		if (invalid==12){
- 242:	2c e0       	ldi	r18, 0x0C	; 12
- 244:	e2 16       	cp	r14, r18
- 246:	f1 04       	cpc	r15, r1
- 248:	79 f4       	brne	.+30     	; 0x268 <__EEPROM_REGION_LENGTH__+0x68>
-			PORTC=invalid_open;
- 24a:	81 e8       	ldi	r24, 0x81	; 129
- 24c:	85 bb       	out	0x15, r24	; 21
- 24e:	3f e3       	ldi	r19, 0x3F	; 63
- 250:	82 e4       	ldi	r24, 0x42	; 66
- 252:	9f e0       	ldi	r25, 0x0F	; 15
- 254:	31 50       	subi	r19, 0x01	; 1
- 256:	80 40       	sbci	r24, 0x00	; 0
- 258:	90 40       	sbci	r25, 0x00	; 0
- 25a:	e1 f7       	brne	.-8      	; 0x254 <__EEPROM_REGION_LENGTH__+0x54>
- 25c:	00 c0       	rjmp	.+0      	; 0x25e <__EEPROM_REGION_LENGTH__+0x5e>
- 25e:	00 00       	nop
-			_delay_ms(5000);
-			PORTC=invalid_close;
- 260:	15 ba       	out	0x15, r1	; 21
-			invalid=0;
- 262:	e1 2c       	mov	r14, r1
- 264:	f1 2c       	mov	r15, r1
- 266:	7b cf       	rjmp	.-266    	; 0x15e <main+0x84>
+		if (index==4 && checkPassword(password,check,4)==0){
+			PORTA=open;
+		}
+		if((PIND & 0x10)==0x10){
+ 20a:	84 99       	sbic	0x10, 4	; 16
+ 20c:	a5 cf       	rjmp	.-182    	; 0x158 <main+0x7e>
+			index=0;
 		}
 		else{
 			PORTA=close;
- 268:	86 ec       	ldi	r24, 0xC6	; 198
- 26a:	8b bb       	out	0x1b, r24	; 27
- 26c:	78 cf       	rjmp	.-272    	; 0x15e <main+0x84>
+ 20e:	86 ec       	ldi	r24, 0xC6	; 198
+ 210:	8b bb       	out	0x1b, r24	; 27
+ 212:	87 01       	movw	r16, r14
+ 214:	a1 cf       	rjmp	.-190    	; 0x158 <main+0x7e>
 
-0000026e <_exit>:
- 26e:	f8 94       	cli
+00000216 <_exit>:
+ 216:	f8 94       	cli
 
-00000270 <__stop_program>:
- 270:	ff cf       	rjmp	.-2      	; 0x270 <__stop_program>
+00000218 <__stop_program>:
+ 218:	ff cf       	rjmp	.-2      	; 0x218 <__stop_program>
